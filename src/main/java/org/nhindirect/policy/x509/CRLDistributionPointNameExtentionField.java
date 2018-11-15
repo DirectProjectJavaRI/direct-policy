@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.bouncycastle.asn1.DERObject;
+import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.x509.CRLDistPoint;
 import org.bouncycastle.asn1.x509.DistributionPoint;
 import org.bouncycastle.asn1.x509.DistributionPointName;
@@ -69,7 +69,7 @@ public class CRLDistributionPointNameExtentionField extends AbstractExtensionFie
 	{
 		this.certificate = value;
 		
-		final DERObject exValue = getExtensionValue(value);
+		final ASN1Object exValue = getExtensionValue(value);
 		
 		if (exValue == null)
 		{

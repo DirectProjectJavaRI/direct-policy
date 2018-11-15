@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.bouncycastle.asn1.DERObject;
-import org.bouncycastle.asn1.DERObjectIdentifier;
+import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
+import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.nhindirect.policy.PolicyProcessException;
 import org.nhindirect.policy.PolicyRequiredException;
 import org.nhindirect.policy.PolicyValueFactory;
@@ -56,7 +56,7 @@ public class ExtendedKeyUsageExtensionField extends AbstractExtensionField<Colle
 	{
 		this.certificate = value;
 		
-		final DERObject exValue = getExtensionValue(value);
+		final ASN1Object exValue = getExtensionValue(value);
 		
 		if (exValue == null)
 		{
@@ -72,11 +72,10 @@ public class ExtendedKeyUsageExtensionField extends AbstractExtensionField<Colle
 		
 		final ExtendedKeyUsage usages = ExtendedKeyUsage.getInstance(exValue);
 		
-		@SuppressWarnings("unchecked")
-		final Collection<DERObjectIdentifier> purposeList = usages.getUsages();
+		final KeyPurposeId[] purposeList = usages.getUsages();
 		
-		final Collection<String> usageList = new ArrayList<String>();
-		for (DERObjectIdentifier purpose : purposeList)
+		final Collection<String> usageList = new ArrayList<String>(purposeList.length);
+		for (KeyPurposeId purpose : purposeList)
 			usageList.add(purpose.getId());
 		
 		this.policyValue = PolicyValueFactory.getInstance(usageList);

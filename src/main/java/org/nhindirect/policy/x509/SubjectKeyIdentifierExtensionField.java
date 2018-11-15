@@ -23,8 +23,7 @@ package org.nhindirect.policy.x509;
 
 import java.security.cert.X509Certificate;
 
-
-import org.bouncycastle.asn1.DERObject;
+import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.nhindirect.policy.PolicyProcessException;
 import org.nhindirect.policy.PolicyRequiredException;
@@ -63,7 +62,7 @@ public class SubjectKeyIdentifierExtensionField extends AbstractExtensionField<S
 	{
 		this.certificate = value;
 		
-		final DERObject exValue = getExtensionValue(value);
+		final ASN1Object exValue = getExtensionValue(value);
 		
 		if (exValue == null)
 		{

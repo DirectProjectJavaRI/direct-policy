@@ -23,9 +23,8 @@ package org.nhindirect.policy.x509;
 
 import java.security.cert.X509Certificate;
 
-import org.bouncycastle.asn1.DERObject;
-import org.bouncycastle.asn1.x509.TBSCertificateStructure;
-
+import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.x509.TBSCertificate;
 import org.nhindirect.policy.PolicyProcessException;
 import org.nhindirect.policy.PolicyValueFactory;
 
@@ -66,7 +65,7 @@ public class SubjectPublicKeyAlgorithmField extends AbstractTBSField<String>
 	{
 		this.certificate = value;
 		
-		DERObject tbsValue = null;
+		ASN1Object tbsValue = null;
 		
 		try
 		{
@@ -79,10 +78,9 @@ public class SubjectPublicKeyAlgorithmField extends AbstractTBSField<String>
 		}
 		///CLOVER:ON
 		
-		final TBSCertificateStructure tbsStruct = TBSCertificateStructure.getInstance(tbsValue);
+		final TBSCertificate tbsStruct = TBSCertificate.getInstance(tbsValue);
 
-		this.policyValue = PolicyValueFactory.getInstance(tbsStruct.getSubjectPublicKeyInfo().
-				getAlgorithmId().getObjectId().toString());
+		this.policyValue = PolicyValueFactory.getInstance(tbsStruct.getSubjectPublicKeyInfo().getAlgorithm().getAlgorithm().toString());
 	}
 
 }

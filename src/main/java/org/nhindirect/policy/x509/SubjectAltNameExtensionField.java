@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.bouncycastle.asn1.DERObject;
+import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
 
@@ -72,7 +72,7 @@ public class SubjectAltNameExtensionField extends AbstractExtensionField<Collect
 	{
 		this.certificate = value;
 		
-		final DERObject exValue = getExtensionValue(value);
+		final ASN1Object exValue = getExtensionValue(value);
 		
 		if (exValue == null)
 		{

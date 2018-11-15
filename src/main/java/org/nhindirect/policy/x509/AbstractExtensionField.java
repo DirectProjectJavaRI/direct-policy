@@ -24,7 +24,7 @@ package org.nhindirect.policy.x509;
 import java.security.cert.X509Certificate;
 import java.util.Set;
 
-import org.bouncycastle.asn1.DERObject;
+import org.bouncycastle.asn1.ASN1Object;
 import org.nhindirect.policy.PolicyProcessException;
 
 /**
@@ -71,13 +71,13 @@ public abstract class AbstractExtensionField<P> extends AbstractTBSField<P> impl
 	}
 	
 	/**
-	 * Gets the specified certificate extension field from the certificate as a DERObject.  The extension field is 
+	 * Gets the specified certificate extension field from the certificate as a ASN1Object.  The extension field is 
 	 * determined by the concrete implementation's returned value of the {@link #getExtentionIdentifier()} method.
 	 * @param cert  The certificate to extract the extension field from.
 	 * @return The extension field as DERObject.  If the extension does not exist in the certificate, then null is returned.
 	 * @throws PolicyProcessException
 	 */
-    protected DERObject getExtensionValue(X509Certificate cert)
+    protected ASN1Object getExtensionValue(X509Certificate cert)
             throws PolicyProcessException
     {
     	final String oid = getExtentionIdentifier().getId();

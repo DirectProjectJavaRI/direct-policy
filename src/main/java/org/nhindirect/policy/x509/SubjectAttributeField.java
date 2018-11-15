@@ -27,8 +27,8 @@ import java.util.Collection;
 
 import javax.security.auth.x500.X500Principal;
 
-import org.bouncycastle.asn1.x509.TBSCertificateStructure;
-import org.bouncycastle.asn1.x509.X509Name;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.TBSCertificate;
 import org.nhindirect.policy.PolicyProcessException;
 import org.nhindirect.policy.PolicyValueFactory;
 
@@ -88,7 +88,7 @@ public class SubjectAttributeField extends IssuerAttributeField
 	 * @param tbsStruct The TBS structure of the certificate
 	 * @return the subject field as an X509Name from the certificate TBS structure.
 	 */
-	protected X509Name getX509Name(TBSCertificateStructure tbsStruct)
+	protected X500Name getX509Name(TBSCertificate tbsStruct)
 	{
 		return tbsStruct.getSubject();
 	}

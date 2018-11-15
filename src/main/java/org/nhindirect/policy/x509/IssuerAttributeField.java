@@ -22,16 +22,18 @@ THE POSSIBILITY OF SUCH DAMAGE.
 package org.nhindirect.policy.x509;
 
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Vector;
 
 import javax.security.auth.x500.X500Principal;
 
+import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.DERObjectIdentifier;
-import org.bouncycastle.asn1.DERObject;
-import org.bouncycastle.asn1.x509.TBSCertificateStructure;
-import org.bouncycastle.asn1.x509.X509Name;
+import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
+import org.bouncycastle.asn1.x500.RDN;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.TBSCertificate;
 import org.nhindirect.policy.PolicyProcessException;
 import org.nhindirect.policy.PolicyRequiredException;
 import org.nhindirect.policy.PolicyValueFactory;
@@ -87,7 +89,7 @@ public class IssuerAttributeField extends AbstractTBSField<Collection<String>>
 			return;
 		}
 		
-		DERObject tbsValue = null;
+		ASN1Object tbsValue = null;
 		
 		try
 		{
@@ -100,19 +102,24 @@ public class IssuerAttributeField extends AbstractTBSField<Collection<String>>
 		}
 		///CLOVER:ON
 		
-		final TBSCertificateStructure tbsStruct = TBSCertificateStructure.getInstance(tbsValue);
+		final TBSCertificate tbsStruct = TBSCertificate.getInstance(tbsValue);
 		
-		final X509Name x509Name = getX509Name(tbsStruct);
+		final X500Name x500Name = getX509Name(tbsStruct);
 		
-		@SuppressWarnings("unchecked")
-		final Vector<String> values = x509Name.getValues(new DERObjectIdentifier(getRDNAttributeFieldId().getId()));
+		final RDN[] values = x500Name.getRDNs(new DERObjectIdentifier(getRDNAttributeFieldId().getId()));
 		
-		if (values.isEmpty() && this.isRequired())
+		if (values.length == 0  && this.isRequired())
 			throw new PolicyRequiredException(getFieldName() + " field attribute " + rdnAttributeId.getName()  + " is marked as required but is not present.");
 		
-		final Collection<String> retVal = values; 
-			
+		
+		final Collection<String> retVal = new ArrayList<>();
+		for (RDN rds : values)
+		{
+			for (AttributeTypeAndValue val : rds.getTypesAndValues())
+				retVal.add(val.getValue().toString());
+		}
 
+		
 		this.policyValue = PolicyValueFactory.getInstance(retVal);
 	}
 
@@ -122,7 +129,7 @@ public class IssuerAttributeField extends AbstractTBSField<Collection<String>>
 	 * @param tbsStruct The TBS structure of the certificate
 	 * @return the issuer field as an X509Name from the certificate TBS structure.
 	 */
-	protected X509Name getX509Name(TBSCertificateStructure tbsStruct)
+	protected X500Name getX509Name(TBSCertificate tbsStruct)
 	{
 		return tbsStruct.getIssuer();
 	}

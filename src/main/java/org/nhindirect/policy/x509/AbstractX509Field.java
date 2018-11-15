@@ -25,9 +25,9 @@ import java.security.cert.X509Certificate;
 
 import org.apache.commons.io.IOUtils;
 import org.bouncycastle.asn1.ASN1InputStream;
+import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1OctetString;
-import org.bouncycastle.asn1.DERObject;
-import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.asn1.DLSequence;
 import org.nhindirect.policy.PolicyExpressionReferenceType;
 import org.nhindirect.policy.PolicyExpressionType;
 import org.nhindirect.policy.PolicyProcessException;
@@ -105,7 +105,7 @@ public abstract class AbstractX509Field<P> implements X509Field<P>
 	 * @throws PolicyProcessException
 	 */
     @SuppressWarnings("deprecation")
-	protected DERObject getObject(byte[] ext)
+	protected ASN1Object getObject(byte[] ext)
             throws PolicyProcessException
     {
     	ASN1InputStream aIn = null;
@@ -135,17 +135,17 @@ public abstract class AbstractX509Field<P> implements X509Field<P>
 	 * @throws PolicyProcessException
 	 */
     @SuppressWarnings("deprecation")
-	protected DERObject getDERObject(byte[] ext)
+	protected ASN1Object getDERObject(byte[] ext)
             throws PolicyProcessException
     {
     	ASN1InputStream aIn = null;
         try
         {
             aIn = new ASN1InputStream(ext);
-            DERSequence seq = (DERSequence)aIn.readObject();
+            DLSequence seq = (DLSequence)aIn.readObject();
         	IOUtils.closeQuietly(aIn);
             
-            aIn = new ASN1InputStream(seq.getDEREncoded());
+            aIn = new ASN1InputStream(seq.getEncoded());
             return aIn.readObject();
         }
         catch (Exception e)

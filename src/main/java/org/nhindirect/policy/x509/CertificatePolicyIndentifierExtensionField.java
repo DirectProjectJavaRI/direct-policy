@@ -27,9 +27,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.DEREncodable;
-import org.bouncycastle.asn1.DERObject;
 import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.nhindirect.policy.PolicyProcessException;
 import org.nhindirect.policy.PolicyRequiredException;
@@ -67,7 +67,7 @@ public class CertificatePolicyIndentifierExtensionField extends AbstractExtensio
 	{
 		this.certificate = value;
 		
-		final DERObject exValue = getExtensionValue(value);
+		final ASN1Object exValue = getExtensionValue(value);
 		
 		if (exValue == null)
 		{
@@ -86,7 +86,7 @@ public class CertificatePolicyIndentifierExtensionField extends AbstractExtensio
 		final ASN1Sequence seq = (ASN1Sequence)exValue;
 		
 		@SuppressWarnings("unchecked")
-		final Enumeration<DEREncodable> pols = seq.getObjects();
+		final Enumeration<ASN1Encodable> pols = seq.getObjects();
 		while (pols.hasMoreElements())
 		{
 			final PolicyInformation pol = PolicyInformation.getInstance(pols.nextElement());
