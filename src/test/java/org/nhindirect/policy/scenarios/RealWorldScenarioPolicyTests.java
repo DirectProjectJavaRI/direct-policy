@@ -33,7 +33,7 @@ public class RealWorldScenarioPolicyTests
 	@Test
 	public void testCertificateContainsPolicyAndKeyUsage() throws Exception
 	{
-		final InputStream str = FileUtils.openInputStream(new File("/Users/gm2552/workspace/direct-trust-utils/src/main/resources/policies/interopTestCertPolicy.pol"));
+		final InputStream str = FileUtils.openInputStream(new File("./src/test/resources/policies/interopTestCertPolicy.pol"));
 				
 		
 		final PolicyExpression exp = PolicyLexiconParserFactory.getInstance(PolicyLexicon.SIMPLE_TEXT_V1).parse(str);
