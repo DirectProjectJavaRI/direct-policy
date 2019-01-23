@@ -6,6 +6,26 @@
         Greg Meyer
         ---
 
+{6.0}
+
+    Changes included with release 6.0
+    
+    []
+    
+    Enhancements
+    
+ 	* Requires Java 8
+ 	
+ 	* Incorporation/Upgrade to Spring 5 and SpringBoot 2.1
+    
+    * Updating to BouncyCaslte bcprov-jdk15on library.
+
+    [] 
+     
+    Bug Fixes
+
+    * NA
+
 {1.0.1}
 
     Changes included with release 1.0.1

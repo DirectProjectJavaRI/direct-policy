@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>direct-policy</artifactId>    
     <name>Direct Project policy enablement engine</name>
-    <version>6.0-SNAPSHOT</version>
+    <version>6.0</version>
     <description>Direct Project policy enablement engine</description>
     <inceptionYear>2010</inceptionYear>
     <url>http://api.nhindirect.org/x/www/api.nhindirect.org/java/site/direct-policy/${project.version}</url> 
@@ -26,8 +26,8 @@
         <maven>3.0.0</maven>
    </prerequisites>   
   <scm>
-     <url>http://code.google.com/p/nhin-d/source/browse/#hg/java/direct-policy</url>  
-     <connection>scm:hg:https://nhin-d.googlecode.com/hg/nhin-d/java/direct-policy</connection>
+     <url>scm:git:https://github.com/DirectProjectJavaRI/direct-common.git</url>  
+     <connection>scm:git:https://github.com/DirectProjectJavaRI/direct-common.git</connection>
   </scm> 
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -39,15 +39,7 @@
         <name>New BSD License</name>
         <url>http://nhindirect.org/BSDLicense</url>
      </license>
-  </licenses>  
-	<repositories>
-	    <!-- Temp repository for Spring Boot Milestone -->
-        <repository>
-            <id>spring-milestone</id>
-            <name>Spring Milestone Releases</name>
-            <url>https://repo.spring.io/milestone/</url>
-        </repository>
-     </repositories>       
+  </licenses>      
   <dependencies>   	  
 		<dependency>
 			<groupId>com.thoughtworks.xstream</groupId>
@@ -180,26 +172,7 @@
             </goals>
           </execution>
         </executions>
-      </plugin>    
-        <plugin>
-            <groupId>com.atlassian.maven.plugins</groupId>
-            <artifactId>maven-clover2-plugin</artifactId>
-            <version>3.1.0</version>
-            <configuration>
-                <jdk>1.8</jdk>
-			<licenseLocation>
-				${project.basedir}/../licenses/clover.license
-			</licenseLocation>
-            </configuration>
-            <executions>
-                <execution>
-                    <phase>pre-site</phase>
-                    <goals>
-                        <goal>instrument</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>	    
+      </plugin>        
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jar-plugin</artifactId>
@@ -290,30 +263,33 @@
                </dependency>
 		</dependencies>
 	 </plugin>      
-         <!--  for releases only
-	     <plugin>
-	      	<groupId>org.apache.maven.plugins</groupId> 
-	        <artifactId>maven-javadoc-plugin</artifactId>
-	        <version>2.6.1</version>
-	        <configuration>
-	          <charset>UTF-8</charset>
-	          <docencoding>UTF-8</docencoding>
-	          <docfilessubdirs>true</docfilessubdirs>
-              <detectJavaApiLink>true</detectJavaApiLink>
-              <detectLinks>true</detectLinks>
-	          <source>1.6</source>
-	          <show>public</show>               	          
-	        </configuration>
-	        <executions>
-	            <execution>
-	                <phase>package</phase>
-	                <id>attach-javadocs</id>
-	                <goals>
-	                  <goal>jar</goal>
-	                </goals>
-	            </execution>
-	        </executions>		        
-	     </plugin>  
+     <plugin>
+      	<groupId>org.apache.maven.plugins</groupId> 
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.6.1</version>
+        <configuration>
+		    <additionalparam>-Xdoclint:none</additionalparam>
+			<charset>UTF-8</charset>
+			<docencoding>UTF-8</docencoding>
+			<docfilessubdirs>true</docfilessubdirs>
+			<detectJavaApiLink>true</detectJavaApiLink>
+			<detectLinks>true</detectLinks>
+			<source>1.8</source>
+			<show>public</show> 
+            <excludePackageNames>
+               org.nhindirect.policy.tools
+            </excludePackageNames>    			           	          
+	    </configuration>
+	    <executions>
+              <execution>
+	              <phase>package</phase>
+	              <id>attach-javadocs</id>
+	              <goals>
+	                <goal>jar</goal>
+	              </goals>
+	          </execution>
+	    </executions>	  	        
+	 </plugin>    
 	     <plugin>
              <groupId>org.apache.maven.plugins</groupId>
              <artifactId>maven-gpg-plugin</artifactId>
@@ -326,39 +302,39 @@
                      </goals>
               </execution>
             </executions>
-        </plugin>	    
-         -->      			    
+        </plugin>	        			    
     </plugins>	    
   </build>                         	
   <reporting>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.9</version>
-			</plugin>  
+	      <plugin>
+	           <groupId>org.apache.maven.plugins</groupId>
+	           <artifactId>maven-project-info-reports-plugin</artifactId>
+	           <version>2.9</version>
+	      </plugin>  
 	      <plugin>
 	      	<groupId>org.apache.maven.plugins</groupId> 
 	        <artifactId>maven-javadoc-plugin</artifactId>
-	        <version>3.0.1</version>
+	        <version>2.6.1</version>
 	        <configuration>
-	          <charset>UTF-8</charset>
-	          <docencoding>UTF-8</docencoding>
-	          <docfilessubdirs>true</docfilessubdirs>
-              <detectJavaApiLink>true</detectJavaApiLink>
-              <detectLinks>true</detectLinks>
-	          <source>1.8</source>
-	          <show>public</show>    
-	          <excludePackageNames>
-	              org.nhindirect.policy.tools
-	          </excludePackageNames>      	           	          
-	        </configuration>
+			    <additionalparam>-Xdoclint:none</additionalparam>
+				<charset>UTF-8</charset>
+				<docencoding>UTF-8</docencoding>
+				<docfilessubdirs>true</docfilessubdirs>
+				<detectJavaApiLink>true</detectJavaApiLink>
+				<detectLinks>true</detectLinks>
+				<source>1.8</source>
+				<show>public</show> 
+	            <excludePackageNames>
+	               org.nhindirect.policy.tools
+	            </excludePackageNames>    			           	          
+		    </configuration>
 	      </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
        			<configuration>
-          			<targetJdk>1.6</targetJdk>
+          			<targetJdk>1.8</targetJdk>
         		</configuration>					
 			</plugin>
 		    <plugin>
@@ -372,7 +348,7 @@
 	        <plugin>
 	            <groupId>org.codehaus.mojo</groupId> 
 	            <artifactId>findbugs-maven-plugin</artifactId>
-	            <version>2.3</version> 
+	            <version>2.3.2</version> 
 	            <configuration>
 	                <effort>Max</effort>
 	                <excludeFilterFile>${project.basedir}/src/report/findbugs-exclude.xml</excludeFilterFile>
@@ -389,17 +365,7 @@
 	                    <tag>@deprecated</tag>
 	                </tags>
 	            </configuration>
-	        </plugin>	
-			<plugin>
-	            <groupId>com.atlassian.maven.plugins</groupId>
-	            <artifactId>maven-clover2-plugin</artifactId>
-	            <version>3.1.0</version>
-				<configuration>
-					<licenseLocation>
-						${project.basedir}/../licenses/clover.license
-					</licenseLocation>
-				</configuration>
-			</plugin>	                   
+	        </plugin>	                   
 		</plugins>
   </reporting>
   <distributionManagement>
