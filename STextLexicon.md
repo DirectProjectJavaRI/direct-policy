@@ -177,17 +177,17 @@ The contains regular expression is expressed with the "{}$" token and the first 
 
 The intersection operator is expressed with the "{}$" token and both parameters can be either a comma delimited set of strings or collections of objects of any type. It returns a collection of elements by performing an intersection of sets operation on both collections. The intersection is process by the using the Java Collection retainAll method. If the intersection results in an empty set, then an empty collection is returned. Comma delimited string are automatically converted into a collection of strings.
 
-**LOGICAL OR: "||"**
+**LOGICAL OR: "&#124;&#124;"**
 
-The logical or operator is expressed with the "||" token and each parameter must be a boolean value. It returns a boolean value indicating if at least one operand evaluates to true.
+The logical or operator is expressed with the "&#124;&#124;" token and each parameter must be a boolean value. It returns a boolean value indicating if at least one operand evaluates to true.
 
 **LOGICAL AND: "&&"**
 
 The logical and operator is expressed with the "&&" token and each parameter must be a boolean value. It returns a boolean value indicating that both operands evaluate to true.
 
-**BITWISE OR: "|"**
+**BITWISE OR: "&#124;"**
 
-The bitwise or operator is expressed with the "|" token and each parameter must be an number. It returns a numeric value by performing a bit wise or operation on each bit of the provided numbers.
+The bitwise or operator is expressed with the "&#124;" token and each parameter must be an number. It returns a numeric value by performing a bit wise or operation on each bit of the provided numbers.
 
 **BITWISE AND: "&"**
 
