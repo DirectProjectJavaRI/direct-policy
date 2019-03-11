@@ -108,12 +108,10 @@ The policyUse in conjunction with the incoming and outgoing parameters maps to t
 | Policy Use | Direction | Intercept Point |
 | --- | --- | --- |
 | PUBLIC RESOLVER | Outgoing | Applied when the recipient(s) certificates are discovered via the public certificate resolver. |
-| PUBLIC RESOLVER | Incoming	| Applied when the sender's certificates are discovered via the public certificate resolver.
-This policy is generally not necessary as certificates are extracted from the message signature and filtered via the TRUST policy use. However, it may be desired to use in conjunction with the TRUST filter to logically separate policies. |
+| PUBLIC RESOLVER | Incoming	| Applied when the sender's certificates are discovered via the public certificate resolver.  This policy is generally not necessary as certificates are extracted from the message signature and filtered via the TRUST policy use. However, it may be desired to use in conjunction with the TRUST filter to logically separate policies. |
 | PRIVATE RESOLVE |	Outgoing | Applied when the sender's certificates are discovered via the private certificate resolver. |
 | PRIVATE RESOLVER |	Incoming | Applied when the recipient(s) certificates are discovered via the private certificate resolver. |
-| TRUST | Outgoing | Applied after the recipient(s) certificate are validated via certificate path chaining.
-This policy is generally not necessary if the outgoing PUBLIC RESOLVER filter is set, however, it may be desired to use in conjunction with the PUBLIC RESOLVER filter to logically separate policies. For example, the PUBLIC RESOLVER may filter based on key usage and TRUST resolver may filter based on policy OIDs. Logically separating policies allows for better reuse of policies for other policy groups. |
+| TRUST | Outgoing | Applied after the recipient(s) certificate are validated via certificate path chaining.  This policy is generally not necessary if the outgoing PUBLIC RESOLVER filter is set, however, it may be desired to use in conjunction with the PUBLIC RESOLVER filter to logically separate policies. For example, the PUBLIC RESOLVER may filter based on key usage and TRUST resolver may filter based on policy OIDs. Logically separating policies allows for better reuse of policies for other policy groups. |
 | TRUST	|Incoming | Applied after the sender's certificates are validated via certificate path chaining. |
 
 **Add Group To Domain**
