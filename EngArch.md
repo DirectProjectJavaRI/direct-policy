@@ -30,7 +30,8 @@ Intermediate state/PolicyExpression objects can be serialized to an external med
 
 Parsers should be created using the [PolicyLexiconParserFactory](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyLexiconParserFactory.html). The following is a code snippet example that creates a parser and parses a definition into an intermediate state object:
 
-```  final InputStream stream = IOUtils.toInputStream("X509.TBS.EXTENSION.SubjectKeyIdentifier+ = 1.3.2.3");
+```  
+final InputStream stream = IOUtils.toInputStream("X509.TBS.EXTENSION.SubjectKeyIdentifier+ = 1.3.2.3");
 
   final LexiconParser parser = PolicyLexiconParserFactory.getInstance(PolicyLexicon.SIMPLE_TEXT_V1);
   
