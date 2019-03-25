@@ -13,12 +13,12 @@
         <section name="Overview">
             <p>
                The direct-policy module is a library containing the policy enable engine for the DirectProject Java reference implementation.  It implements
-               the ideas and constructs introduced in the Policy Enablement proposal <a href="http://wiki.directproject.org/file/detail/Direct+%2B+Policy+Enablement.docx">document</a>  
+               the ideas and constructs introduced in the Policy Enablement proposal document
                and contain APIs to create and validate policies for x509 certificates.
             </p>    
             <p>
                For more detail on developing and configuring policy definitions, refer to the
-               <a href="users-guide/index.html">users guide.</a>                
+               <a href="https://directprojectjavari.github.io/direct-policy/">users guide.</a>                
             </p>                  
         </section>
     </body>
