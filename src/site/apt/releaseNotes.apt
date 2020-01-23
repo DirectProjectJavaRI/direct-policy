@@ -6,6 +6,22 @@
         Greg Meyer
         ---
 
+{7.0}
+
+    Changes included with release 7.0
+    
+    []
+    
+    Enhancements
+    
+ 	* Updating to Spring Boot 2.2.4 and SpringCloud Hoxton SR1
+
+    [] 
+     
+    Bug Fixes
+
+    * NA
+
 {6.0}
 
     Changes included with release 6.0

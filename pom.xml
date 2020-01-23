@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>direct-policy</artifactId>    
     <name>Direct Project policy enablement engine</name>
-    <version>6.0</version>
+    <version>7.0</version>
     <description>Direct Project policy enablement engine</description>
     <inceptionYear>2010</inceptionYear>
     <url>http://api.nhindirect.org/x/www/api.nhindirect.org/java/site/direct-policy/${project.version}</url> 
@@ -26,13 +26,13 @@
         <maven>3.0.0</maven>
    </prerequisites>   
   <scm>
-     <url>scm:git:https://github.com/DirectProjectJavaRI/direct-common.git</url>  
-     <connection>scm:git:https://github.com/DirectProjectJavaRI/direct-common.git</connection>
+     <url>scm:git:https://github.com/DirectProjectJavaRI/direct-policy.git</url>  
+     <connection>scm:git:https://github.com/DirectProjectJavaRI/direct-policy.git</connection>
   </scm> 
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-dependencies</artifactId>
-    <version>2.1.2.RELEASE</version>
+    <version>2.2.4.RELEASE</version>
   </parent>  
   <licenses>
      <license>
@@ -44,12 +44,12 @@
 		<dependency>
 			<groupId>com.thoughtworks.xstream</groupId>
 			<artifactId>xstream</artifactId>
-			<version>1.4.9</version>
+			<version>1.4.11.1</version>
 		</dependency>	   
 		<dependency>
 		    <groupId>org.bouncycastle</groupId>
 		    <artifactId>bcprov-jdk15on</artifactId>
-		    <version>1.60</version>    
+		    <version>1.64</version>    
 		</dependency>  		
 		<dependency>
 			<groupId>javax.mail</groupId>
@@ -70,12 +70,7 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-		</dependency>  		                  	
-		<dependency>
-		  <groupId>org.springframework.boot</groupId>
-		  <artifactId>spring-boot-starter-tomcat</artifactId>
-		  <scope>test</scope>
-		</dependency>	
+		</dependency>  		                  		
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -193,80 +188,10 @@
          </execution>
        </executions>
      </plugin>
-       <!-- DOXIA does not yet copy resources to the generated-site or site location.  Bug
-       DOXIA-355 was submitted in July of 09 and is listed to be resolved in DOXIA 1.2.
-       This plugin a is work around for copying the resources from the book source to 
-       the generate site. -->
-       <plugin>
-         <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>maven-antrun-plugin</artifactId>
-         <executions>
-           <execution>
-             <id>book</id>
-             <phase>pre-site</phase>
-             <configuration>
-               <tasks>
-                 <copy todir="${project.build.directory}/generated-site/xdoc/users-guide/images/">
-                   <fileset dir="${basedir}/src/books/users-guide/images/" />
-                 </copy>
-                 <copy todir="${project.build.directory}/site/users-guide/images/">
-                   <fileset dir="${basedir}/src/books/users-guide/images/" />
-                 </copy>                  
-               </tasks>
-             </configuration>
-             <goals>
-               <goal>run</goal>
-             </goals>
-           </execution>
-         </executions>
-       </plugin>        
-       <plugin>
-		<groupId>org.apache.maven.doxia</groupId>
-		<artifactId>doxia-maven-plugin</artifactId>
-		<version>1.2</version>
-		<executions>
-			<execution>
-				<phase>pre-site</phase>
-				<goals>
-					<goal>render-books</goal>
-				</goals>
-			</execution>
-		</executions>
-		<configuration>
-			<books>
-				<book>
-					<directory>src/books/users-guide</directory>
-					<descriptor>src/books/users-guide.xml</descriptor>
-					<formats>
-						<format>
-							<id>xdoc</id>
-						</format>													
-					</formats>
-				</book>
-			</books>
-		</configuration>
-		<dependencies>
-			<dependency>
-				<groupId>org.codehaus.plexus</groupId>
-				<artifactId>plexus-utils</artifactId>
-				<version>1.5.12</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.maven.doxia</groupId>
-				<artifactId>doxia-decoration-model</artifactId>
-				<version>1.2</version>
-			</dependency>
-               <dependency>
-                   <groupId>org.apache.maven.doxia</groupId>
-                   <artifactId>doxia-module-confluence</artifactId>
-                   <version>1.2</version>
-               </dependency>
-		</dependencies>
-	 </plugin>      
      <plugin>
       	<groupId>org.apache.maven.plugins</groupId> 
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.6.1</version>
+        <version>2.9.1</version>
         <configuration>
 		    <additionalparam>-Xdoclint:none</additionalparam>
 			<charset>UTF-8</charset>
@@ -289,7 +214,7 @@
 	              </goals>
 	          </execution>
 	    </executions>	  	        
-	 </plugin>    
+	 </plugin>     
 	     <plugin>
              <groupId>org.apache.maven.plugins</groupId>
              <artifactId>maven-gpg-plugin</artifactId>
@@ -302,7 +227,7 @@
                      </goals>
               </execution>
             </executions>
-        </plugin>	        			    
+        </plugin>	     			    
     </plugins>	    
   </build>                         	
   <reporting>
@@ -315,7 +240,7 @@
 	      <plugin>
 	      	<groupId>org.apache.maven.plugins</groupId> 
 	        <artifactId>maven-javadoc-plugin</artifactId>
-	        <version>2.6.1</version>
+	        <version>2.9.1</version>
 	        <configuration>
 			    <additionalparam>-Xdoclint:none</additionalparam>
 				<charset>UTF-8</charset>
