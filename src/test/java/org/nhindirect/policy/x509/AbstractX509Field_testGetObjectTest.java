@@ -1,11 +1,12 @@
 package org.nhindirect.policy.x509;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import java.security.cert.X509Certificate;
 
-import org.junit.Test;
 import org.nhindirect.policy.PolicyProcessException;
 import org.nhindirect.policy.util.TestUtils;
 

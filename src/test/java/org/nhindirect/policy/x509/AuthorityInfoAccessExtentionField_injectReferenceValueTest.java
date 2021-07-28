@@ -1,16 +1,15 @@
 package org.nhindirect.policy.x509;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import java.security.cert.X509Certificate;
 import java.util.Collection;
 
-import org.junit.Test;
 import org.nhindirect.policy.PolicyRequiredException;
 import org.nhindirect.policy.util.TestUtils;
-import org.nhindirect.policy.x509.AuthorityInfoAccessExtentionField;
-import org.nhindirect.policy.x509.AuthorityInfoAccessMethodIdentifier;
 
 public class AuthorityInfoAccessExtentionField_injectReferenceValueTest
 {

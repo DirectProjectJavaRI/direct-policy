@@ -1,16 +1,15 @@
 package org.nhindirect.policy.impl.machine;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
 import org.nhindirect.policy.PolicyOperator;
 import org.nhindirect.policy.PolicyProcessException;
 import org.nhindirect.policy.PolicyValueFactory;
 import org.nhindirect.policy.impl.BinaryBooleanPolicyOperatorExecutor;
 import org.nhindirect.policy.impl.BinaryIntegerPolicyOperatorExecutor;
-import org.nhindirect.policy.impl.machine.StackMachine;
 
 
 public class StackMachine_createOperatorExecutorTest

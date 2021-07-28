@@ -1,10 +1,12 @@
 package org.nhindirect.policy.impl;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.InputStream;
@@ -12,7 +14,6 @@ import java.security.cert.X509Certificate;
 import java.util.Vector;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Test;
 import org.nhindirect.policy.Compiler;
 import org.nhindirect.policy.ExecutionEngine;
 import org.nhindirect.policy.Opcode;
@@ -32,7 +33,7 @@ public class DefaultPolicyFilter_isCompliantTest
 		final ExecutionEngine engine = mock(ExecutionEngine.class);
 		final X509Certificate cert = mock(X509Certificate.class);
 		
-		when(engine.evaluate((Vector<Opcode>)any())).thenReturn(true);
+		when(engine.evaluate((Vector<Opcode>)any())).thenReturn(Boolean.TRUE);
 		
 		final DefaultPolicyFilter filter = new DefaultPolicyFilter();
 		filter.setCompiler(compiler);
@@ -50,7 +51,7 @@ public class DefaultPolicyFilter_isCompliantTest
 		final PolicyExpression expression = mock(PolicyExpression.class);
 		final X509Certificate cert = mock(X509Certificate.class);
 		
-		when(engine.evaluate((Vector<Opcode>)any())).thenReturn(true);
+		when(engine.evaluate((Vector<Opcode>)any())).thenReturn(Boolean.TRUE);
 		
 		final DefaultPolicyFilter filter = new DefaultPolicyFilter();
 		filter.setCompiler(compiler);
@@ -68,7 +69,7 @@ public class DefaultPolicyFilter_isCompliantTest
 		final PolicyExpression expression = mock(PolicyExpression.class);
 		final X509Certificate cert = mock(X509Certificate.class);
 		
-		when(engine.evaluate((Vector<Opcode>)any())).thenReturn(false);
+		when(engine.evaluate((Vector<Opcode>)any())).thenReturn(Boolean.FALSE);
 		
 		final DefaultPolicyFilter filter = new DefaultPolicyFilter();
 		filter.setCompiler(compiler);

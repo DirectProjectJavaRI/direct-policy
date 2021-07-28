@@ -1,16 +1,17 @@
 package org.nhindirect.policy.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Vector;
 
 import org.bouncycastle.asn1.x509.KeyUsage;
-import org.junit.Test;
 import org.nhindirect.policy.LiteralPolicyExpression;
 import org.nhindirect.policy.LiteralPolicyExpressionFactory;
 import org.nhindirect.policy.OperationPolicyExpression;
@@ -21,7 +22,6 @@ import org.nhindirect.policy.PolicyOperator;
 import org.nhindirect.policy.PolicyParseException;
 import org.nhindirect.policy.PolicyValue;
 import org.nhindirect.policy.PolicyValueFactory;
-import org.nhindirect.policy.impl.XMLLexiconPolicyParser;
 import org.nhindirect.policy.x509.ExtendedKeyUsageExtensionField;
 import org.nhindirect.policy.x509.ExtendedKeyUsageIdentifier;
 import org.nhindirect.policy.x509.KeyUsageBit;

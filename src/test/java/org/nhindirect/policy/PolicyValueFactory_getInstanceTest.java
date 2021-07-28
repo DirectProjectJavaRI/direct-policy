@@ -1,10 +1,10 @@
 package org.nhindirect.policy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PolicyValueFactory_getInstanceTest
 {
@@ -20,12 +20,11 @@ public class PolicyValueFactory_getInstanceTest
 		
 		
 		assertFalse(value.equals(null));
-		assertTrue(value.equals(12345));
+		assertTrue(value.getPolicyValue().equals(12345));
 		assertTrue(value.equals(PolicyValueFactory.getInstance(12345)));
 		
 		
-		assertTrue(value.equals(12345));
-		assertFalse(value.equals("12345"));
+		assertTrue(value.getPolicyValue().equals(12345));
 	}
 	
 }

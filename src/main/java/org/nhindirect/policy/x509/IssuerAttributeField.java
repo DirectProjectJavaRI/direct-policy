@@ -29,7 +29,7 @@ import java.util.Collection;
 import javax.security.auth.x500.X500Principal;
 
 import org.bouncycastle.asn1.ASN1Object;
-import org.bouncycastle.asn1.DERObjectIdentifier;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
@@ -106,7 +106,7 @@ public class IssuerAttributeField extends AbstractTBSField<Collection<String>>
 		
 		final X500Name x500Name = getX509Name(tbsStruct);
 		
-		final RDN[] values = x500Name.getRDNs(new DERObjectIdentifier(getRDNAttributeFieldId().getId()));
+		final RDN[] values = x500Name.getRDNs(new ASN1ObjectIdentifier(getRDNAttributeFieldId().getId()));
 		
 		if (values.length == 0  && this.isRequired())
 			throw new PolicyRequiredException(getFieldName() + " field attribute " + rdnAttributeId.getName()  + " is marked as required but is not present.");

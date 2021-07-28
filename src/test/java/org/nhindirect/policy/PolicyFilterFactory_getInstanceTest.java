@@ -1,10 +1,11 @@
 package org.nhindirect.policy;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 
-import org.junit.Test;
 import org.nhindirect.policy.impl.DefaultPolicyFilter;
 
 public class PolicyFilterFactory_getInstanceTest

@@ -1,6 +1,8 @@
 package org.nhindirect.policy.impl;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.InputStream;
@@ -8,7 +10,6 @@ import java.util.Vector;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.junit.Test;
 
 public class SimpleTextV1LexiconPolicyParser_parseToTokensTest
 {
