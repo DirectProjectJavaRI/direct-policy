@@ -1,12 +1,12 @@
 package org.nhindirect.policy;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Test;
 import java.io.InputStream;
 import java.security.cert.X509Certificate;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Test;
 import org.nhindirect.policy.util.TestUtils;
 
 @SuppressWarnings("deprecation")

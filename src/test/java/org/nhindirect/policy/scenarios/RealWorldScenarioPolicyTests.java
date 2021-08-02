@@ -1,13 +1,15 @@
 package org.nhindirect.policy.scenarios;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.InputStream;
 import java.security.cert.X509Certificate;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Test;
+
 import org.nhindirect.policy.PolicyExpression;
 import org.nhindirect.policy.PolicyFilter;
 import org.nhindirect.policy.PolicyFilterFactory;

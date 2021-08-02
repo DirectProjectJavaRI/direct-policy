@@ -1,17 +1,16 @@
 package org.nhindirect.policy.x509;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.Iterator;
 
 import org.nhindirect.policy.util.TestUtils;
-import org.junit.Test;
 import org.nhindirect.policy.PolicyRequiredException;
-import org.nhindirect.policy.x509.RDNAttributeIdentifier;
-import org.nhindirect.policy.x509.SubjectAttributeField;
 
 public class SubjectAttributeField_injectReferenceValueTest
 {

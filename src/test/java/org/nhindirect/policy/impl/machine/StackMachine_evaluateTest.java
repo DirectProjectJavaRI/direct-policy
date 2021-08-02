@@ -1,18 +1,17 @@
 package org.nhindirect.policy.impl.machine;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Vector;
 
-import org.junit.Test;
 import org.nhindirect.policy.Opcode;
 import org.nhindirect.policy.PolicyOperator;
 import org.nhindirect.policy.PolicyValueFactory;
-import org.nhindirect.policy.impl.machine.StackMachine;
-import org.nhindirect.policy.impl.machine.StackMachineEntry;
 import org.nhindirect.policy.mock.SpringBaseTest;
 
 public class StackMachine_evaluateTest extends SpringBaseTest

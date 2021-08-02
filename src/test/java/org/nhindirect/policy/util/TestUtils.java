@@ -9,7 +9,6 @@ import java.security.cert.X509Certificate;
 
 import org.apache.commons.io.FileUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.junit.Test;
 
 
 public class TestUtils 
@@ -21,13 +20,6 @@ public class TestUtils
 	
 	// base directory for test certificates
 	private static final String certBasePath = "src/test/resources/certs/"; 
-	
-	
-	@Test
-	public void dummy()
-	{
-		
-	}
 	
 	
 	public static X509Certificate loadCertificate(String certFileName) throws Exception

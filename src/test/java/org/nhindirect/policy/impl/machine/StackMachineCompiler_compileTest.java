@@ -1,14 +1,15 @@
 package org.nhindirect.policy.impl.machine;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import java.security.cert.X509Certificate;
 import java.util.Vector;
 
 import org.bouncycastle.asn1.x509.KeyUsage;
-import org.junit.Test;
 import org.nhindirect.policy.LiteralPolicyExpression;
 import org.nhindirect.policy.LiteralPolicyExpressionFactory;
 import org.nhindirect.policy.Opcode;
@@ -18,9 +19,6 @@ import org.nhindirect.policy.PolicyExpression;
 import org.nhindirect.policy.PolicyOperator;
 import org.nhindirect.policy.PolicyValue;
 import org.nhindirect.policy.PolicyValueFactory;
-import org.nhindirect.policy.impl.machine.StackMachine;
-import org.nhindirect.policy.impl.machine.StackMachineCompiler;
-import org.nhindirect.policy.impl.machine.StackMachineEntry;
 import org.nhindirect.policy.util.TestUtils;
 import org.nhindirect.policy.x509.ExtendedKeyUsageExtensionField;
 import org.nhindirect.policy.x509.ExtendedKeyUsageIdentifier;
