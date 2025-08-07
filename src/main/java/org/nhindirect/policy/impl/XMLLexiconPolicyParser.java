@@ -32,6 +32,7 @@ import org.nhindirect.policy.PolicyParseException;
 import org.nhindirect.policy.PolicyLexiconParser;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.security.AnyTypePermission;
 
 /**
  * Implementation of a {@link PolicyLexiconParser} that parses expressions using the {@link PolicyLexicon#XML} lexicon.  This parser
@@ -67,6 +68,7 @@ public class XMLLexiconPolicyParser implements PolicyLexiconParser, PolicyExpres
 			throw new IllegalArgumentException("XML input stream cannot be null.");
 		
 		final XStream xStream = XStreamFactory.getXStreamInstance();
+		xStream.addPermission(AnyTypePermission.ANY);
 		
 		try
 		{
