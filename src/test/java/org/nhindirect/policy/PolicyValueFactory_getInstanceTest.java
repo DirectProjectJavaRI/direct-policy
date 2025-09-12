@@ -16,7 +16,7 @@ public class PolicyValueFactory_getInstanceTest
 		assertTrue(value.getPolicyValue() instanceof Integer);
 		assertEquals(12345, value.getPolicyValue().intValue());
 		assertEquals("12345", value.toString());
-		assertEquals(new Integer(12345).hashCode(), value.getPolicyValue().hashCode());
+		assertEquals(Integer.valueOf(12345).hashCode(), value.getPolicyValue().hashCode());
 		
 		
 		assertFalse(value.equals(null));

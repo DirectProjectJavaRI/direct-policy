@@ -67,7 +67,6 @@ public class UnaryBooleanPolicyOperatorExecutor<O> implements BooleanPolicyOpera
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("deprecation")
 	@Override
 	public PolicyValue<Boolean> execute() 
 	{
