@@ -1,0 +1,1 @@
+X509.TBS.EXTENSION.CertificatePolicies.PolicyOIDs {?} "^1\\.3\\.6\\.1\\.4\\.1\\.41179\\.2\\.1(\\.[0-9]+)*$"

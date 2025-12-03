@@ -75,4 +75,18 @@ public class SimpleTextV1LexiconPolicyParser_parseToTokensTest
 		
 		stream.close();
 	}	
+	
+	@Test
+	public void testParse_regExWithParenthsis_validateTokens() throws Exception
+	{
+		final SimpleTextV1LexiconPolicyParser parser = new SimpleTextV1LexiconPolicyParser();
+		final InputStream stream = FileUtils.openInputStream(new File("./src/test/resources/policies/simpleLexiconWithRegEx.txt"));
+		
+		Vector<SimpleTextV1LexiconPolicyParser.TokenTypeAssociation> tokens = parser.parseToTokens(stream);
+		assertEquals(3, tokens.size());
+		
+		stream.close();
+	}
+	
+	
 }

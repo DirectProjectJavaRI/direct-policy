@@ -169,6 +169,7 @@ public class SimpleTextV1LexiconPolicyParser extends XMLLexiconPolicyParser
 		tokenMap = new HashMap<String, TokenType>();
 		
 		// build the token list
+		// Note: do not add a raw quote token here. Quoted text is handled specially in parseToTokens.
 		tokenMap.put("(", TokenType.START_LEVEL);
 		tokenMap.put(")", TokenType.END_LEVEL);
 		
@@ -180,7 +181,7 @@ public class SimpleTextV1LexiconPolicyParser extends XMLLexiconPolicyParser
 		// add the X509Fields
 		tokenMap.put(X509FieldType.SIGNATURE.getFieldToken(), TokenType.CERTIFICATE_REFERENCE_EXPRESSION);
 		tokenMap.put(X509FieldType.SIGNATURE_ALGORITHM.getFieldToken(), TokenType.CERTIFICATE_REFERENCE_EXPRESSION);
-		
+
 		// add the TBS fields
 		final TBSFieldName[] tbsFieldNames = (TBSFieldName[].class.cast(TBSFieldName.class.getEnumConstants()));
 		for (TBSFieldName tbsFieldName : tbsFieldNames)
@@ -489,9 +490,67 @@ public class SimpleTextV1LexiconPolicyParser extends XMLLexiconPolicyParser
 			boolean holdMode = false;
 			TokenType holdType = null;
 			
-			for (int i; (i = isr.read()) > 0; ) 
+			for (int ci; (ci = isr.read()) != -1; )
 			{
-				writer.write(i);
+				final char ch = (char)ci;
+
+				// If we encounter an opening quote, flush any buffered text and read until the closing quote.
+				if (ch == '"')
+				{
+					final String pre = writer.toString().trim();
+					if (!pre.isEmpty())
+					{
+						final TokenType exactPreToken = tokenMap.get(pre);
+						final TokenType addPreType = (exactPreToken != null) ? exactPreToken : TokenType.LITERAL_EXPRESSION;
+						tokens.add(new TokenTypeAssociation(pre, addPreType));
+					}
+					writer = new StringWriter();
+
+					// read until closing quote or EOF; everything inside is a literal expression
+					StringBuilder quoted = new StringBuilder();
+					int cj;
+					while ((cj = isr.read()) != -1)
+					{
+						final char qc = (char)cj;
+						// handle escape sequences
+						if (qc == '\\')
+						{
+							int nd = isr.read();
+							if (nd == -1)
+							{
+								// dangling backslash at EOF; treat the backslash literally
+								quoted.append('\\');
+								break;
+							}
+							final char esc = (char)nd;
+							switch (esc)
+							{
+								case '\\':
+									quoted.append('\\');
+									break;
+								case '"':
+									quoted.append('"');
+									break;
+								default:
+									// unknown escape - preserve the backslash and the character (e.g., file paths like \t)
+									quoted.append('\\');
+									quoted.append(esc);
+									break;
+							}
+							continue;
+						}
+						if (qc == '"')
+							break; // found closing quote
+						quoted.append(qc);
+					}
+
+					tokens.add(new TokenTypeAssociation(quoted.toString(), TokenType.LITERAL_EXPRESSION));
+					// continue to next character
+					continue;
+				}
+
+				// Normal processing: append char and continue token detection
+				writer.write(ch);
 				final String checkForTokenString = writer.toString();
 				
 				// check to see if we have an exact match to a token
@@ -499,7 +558,7 @@ public class SimpleTextV1LexiconPolicyParser extends XMLLexiconPolicyParser
 				
 				if (exactMatchToken != null)
 				{
-					// if the token is an operator, we need to keep looking forward to the next
+					// if the token is an operator or certificate ref, we need to keep looking forward to the next
 					// character because some operators are made up of the exact same characters.. we
 					// may have a partial string of an operator with more characters
 					if (exactMatchToken == TokenType.OPERATOR_EXPRESSION || exactMatchToken == TokenType.CERTIFICATE_REFERENCE_EXPRESSION)
@@ -535,8 +594,8 @@ public class SimpleTextV1LexiconPolicyParser extends XMLLexiconPolicyParser
 
 						exactMatchToken = tokenMap.get(nextToken);
 						if (exactMatchToken != null)
-						{							
-								
+						{
+
 							tokens.add(new TokenTypeAssociation(nextToken, exactMatchToken));
 						}
 						else
@@ -549,6 +608,7 @@ public class SimpleTextV1LexiconPolicyParser extends XMLLexiconPolicyParser
 					{
 						// we didn't hit an exact match, but the new character we hit may be a reserved token
 						// check to see if the checkForTokenString now contains a reserved token
+						boolean handled = false;
 						for (String key : tokenMap.keySet())
 						{
 							int idx = checkForTokenString.indexOf(key);
@@ -581,13 +641,19 @@ public class SimpleTextV1LexiconPolicyParser extends XMLLexiconPolicyParser
 									// the token is not an operator, so add it the token vector
 									tokens.add(new TokenTypeAssociation(secondToken, exactMatchToken));
 								}
+								handled = true;
 								break;
 							}
 						}
+
+						if (!handled)
+						{
+							// nothing special found; continue accumulating
+						}
 					}
 				}
-		    }
-			
+			}
+
 			// now that we have completed traversing the expression lexicon, if there is anything left over in the writer then
 			// add it as a token
 			final String remainingString = writer.toString().trim();
@@ -638,7 +704,13 @@ public class SimpleTextV1LexiconPolicyParser extends XMLLexiconPolicyParser
 		/**
 		 * A certificate reference expression
 		 */
-		CERTIFICATE_REFERENCE_EXPRESSION;
+		CERTIFICATE_REFERENCE_EXPRESSION,
+		
+		/**
+		 * Marks the beginning or end of LITERAL_EXPRESSION where all contents regardless of character will 
+		 * be considered part of the LIBERAL_EXPRESSION. 
+		 */
+		LITERAL_QUOTE;
 	}
 	
 	protected Integer resetLevel()
