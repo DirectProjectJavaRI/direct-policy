@@ -32,7 +32,7 @@
    <parent>
 	   <groupId>org.springframework.boot</groupId>
 	   <artifactId>spring-boot-dependencies</artifactId>
-	   <version>3.5.0</version>
+	   <version>4.0.1</version>
 	   <relativePath />
    </parent>
   <licenses>
@@ -43,8 +43,8 @@
   </licenses>  
    <properties>
       <xstream.version>1.4.21</xstream.version>
-      <bcprov-jdk18on.version>1.80</bcprov-jdk18on.version>
-      <commons-io.version>2.19.0</commons-io.version>
+      <bcprov-jdk18on.version>1.83</bcprov-jdk18on.version>
+      <commons-io.version>2.21.0</commons-io.version>
    </properties>      
   <dependencies>   	  
 		<dependency>
@@ -197,6 +197,7 @@
 	          </execution>
 	    </executions>	  	        
 	 </plugin>    
+	 <!-- For releases ony
 	     <plugin>
              <groupId>org.apache.maven.plugins</groupId>
              <artifactId>maven-gpg-plugin</artifactId>
@@ -211,6 +212,7 @@
             </executions>
             <version>3.0.1</version>            
         </plugin>	
+      -->
         <plugin>
           <groupId>org.sonatype.central</groupId>
           <artifactId>central-publishing-maven-plugin</artifactId>
