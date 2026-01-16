@@ -266,20 +266,14 @@ public class EditorPanel extends JPanel
 		}
 	}
 	
-	protected boolean isBuildingNeeded()
+	protected synchronized boolean isBuildingNeeded()
 	{
-		synchronized(needsBuilding)
-		{
-			return needsBuilding;
-		}
+		return needsBuilding;
 	}
 	
-	protected void setBuildingNeeded(boolean buildingNeeded)
+	protected synchronized void setBuildingNeeded(boolean buildingNeeded)
 	{
-		synchronized(needsBuilding)
-		{
-			needsBuilding = buildingNeeded;
-		}
+		needsBuilding = buildingNeeded;
 	}
 }
 ///CLOVER:ON

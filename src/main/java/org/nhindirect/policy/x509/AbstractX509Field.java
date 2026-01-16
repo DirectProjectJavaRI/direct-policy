@@ -104,7 +104,6 @@ public abstract class AbstractX509Field<P> implements X509Field<P>
 	 * @return The converted DERObject
 	 * @throws PolicyProcessException
 	 */
-    @SuppressWarnings("deprecation")
 	protected ASN1Object getObject(byte[] ext)
             throws PolicyProcessException
     {
@@ -134,7 +133,6 @@ public abstract class AbstractX509Field<P> implements X509Field<P>
 	 * @return The converted DERObject
 	 * @throws PolicyProcessException
 	 */
-    @SuppressWarnings("deprecation")
 	protected ASN1Object getDERObject(byte[] ext)
             throws PolicyProcessException
     {
