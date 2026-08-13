@@ -366,7 +366,7 @@ public class SimpleTextV1LexiconPolicyParser extends XMLLexiconPolicyParser
 				if (fieldRefClass == null)
 					throw new PolicyParseException("X509Field with token name " + token + " has not been implemented yet.");
 				
-				retVal = fieldRefClass.newInstance();
+				retVal = fieldRefClass.getDeclaredConstructor().newInstance();
 			}
 			catch (PolicyParseException ex)
 			{
@@ -414,7 +414,7 @@ public class SimpleTextV1LexiconPolicyParser extends XMLLexiconPolicyParser
 				}
 				else
 				{	
-					retVal = fieldRefClass.newInstance();
+					retVal = fieldRefClass.getDeclaredConstructor().newInstance();
 				}
 			}
 			catch (PolicyParseException ex)

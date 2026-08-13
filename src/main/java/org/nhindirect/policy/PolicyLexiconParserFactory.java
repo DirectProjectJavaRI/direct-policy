@@ -39,7 +39,7 @@ public class PolicyLexiconParserFactory
 	{
 		try
 		{
-			final PolicyLexiconParser parser = lexicon.getParserClass().newInstance();
+			final PolicyLexiconParser parser = lexicon.getParserClass().getDeclaredConstructor().newInstance();
 		
 			return parser;
 		}
