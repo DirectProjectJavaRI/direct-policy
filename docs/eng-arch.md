@@ -8,7 +8,7 @@ The policy engine is more or less a boolean logic engine. It processes a set of 
 
 The following diagram is a modular view of the engine:
 
-![policyEnting](assets/policyEngine.PNG)
+![policyEnting](assets/policyEngine.png)
 
 ## Policy Definition
 

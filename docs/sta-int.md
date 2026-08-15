@@ -23,7 +23,7 @@ The following diagrams illustrates the modular layout and flow of messages withi
 
 **Outbound Messages**
 
-![policyFilterOutgoing](assets/policyFilterOutgoing.PNG)
+![policyFilterOutgoing](assets/policyFilterOutgoing.png)
 
 * Resolved private certificates are validated against a private resolver policy (if configured).
 * Resolved public certificates are validated against a public resolver policy (if configured).
@@ -31,7 +31,7 @@ The following diagrams illustrates the modular layout and flow of messages withi
 
 **Inbound Messages**
 
-![policyFilterIncoming](assets/policyFilterIncoming.PNG)
+![policyFilterIncoming](assets/policyFilterIncoming.png)
 
 * Resolved private certificates are validated against a private resolver policy (if configured).
 * Certificate extracted from the message signature are validated against a public trust policy (if configured).
