@@ -1,3 +1,7 @@
+---
+title: Policy Builder
+---
+
 # Policy Builder
 
 The reference implementation source tree provides a tool for building and testing policies. The tool is located under the /java/direct-policy/tools directory in the source tree and is named policyBuilder.sh for unix/linux based systems and policyBuilder.bat for Windows.

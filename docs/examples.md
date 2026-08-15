@@ -1,3 +1,7 @@
+---
+title: Example Policies
+---
+
 # Example Policies
 
 The policy language and operators open up a wide range of expressions that can be built. Below are some example of commonly used policies. Remember that the engine and lexicons allow for compound expressions, so the following examples can be combined in different permutations using boolean operators.

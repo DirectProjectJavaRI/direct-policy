@@ -1,3 +1,7 @@
+---
+title: Policy Engine Architecture
+---
+
 # Policy Engine Architecture
 
 The policy engine is more or less a boolean logic engine. It processes a set of rules called a [PolicyExpression](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyExpression.html) against a provided X509 certificate and determines if the certificate is in compliance with the policy. The engine itself is structurally similar to a compiled programming language and runtime environment. Polices start as definition files written in a specific [PolicyLexicon](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyLexicon.html), are [parsed](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyLexiconParser.html) to an intermediate state, [compiled](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/Compiler.html) into an [ExecutionEngine](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/ExecutionEngine.html) specific set of [Opcodes](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/Opcode.html), and finally processed by the ExecutionEngine.
