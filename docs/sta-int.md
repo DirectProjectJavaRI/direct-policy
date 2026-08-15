@@ -57,7 +57,7 @@ Configuration is done through config-manager command line console, but will be a
 
 1. Launch a command shell and navigate to the ConfigTools/ConfigMgmtConsole/bin directory.
 2. Run the command ConfigMgmtConsole (./ConfigMgmtConsole for unix based systems).
-The console connects to the Direct Project configuration service and manages records using the configuration service client module. By default it uses the url http://localhost:8081/config-service/ConfigurationService, but can be overridden using the configURL command line parameter.
+The console connects to the Direct Project configuration service and manages records using the configuration service client module. By default it uses the url `http://localhost:8081/config-service/ConfigurationService`, but can be overridden using the configURL command line parameter.
 
 ```
 ConfigMgmtConsole configURL http://confserver/config-service/ConfigurationService
