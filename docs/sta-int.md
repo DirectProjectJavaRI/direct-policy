@@ -1,3 +1,7 @@
+---
+title: Security and Trust (STA) Integration and Configuration
+---
+
 # Security and Trust (STA) Integration and Configuration
 
 ## STA Integration
@@ -19,7 +23,7 @@ The following diagrams illustrates the modular layout and flow of messages withi
 
 **Outbound Messages**
 
-![policyFilterOutgoing](assets/policyFilterOutgoing.PNG)
+![policyFilterOutgoing](assets/policyFilterOutgoing.png)
 
 * Resolved private certificates are validated against a private resolver policy (if configured).
 * Resolved public certificates are validated against a public resolver policy (if configured).
@@ -27,7 +31,7 @@ The following diagrams illustrates the modular layout and flow of messages withi
 
 **Inbound Messages**
 
-![policyFilterIncoming](assets/policyFilterIncoming.PNG)
+![policyFilterIncoming](assets/policyFilterIncoming.png)
 
 * Resolved private certificates are validated against a private resolver policy (if configured).
 * Certificate extracted from the message signature are validated against a public trust policy (if configured).
@@ -53,7 +57,7 @@ Configuration is done through config-manager command line console, but will be a
 
 1. Launch a command shell and navigate to the ConfigTools/ConfigMgmtConsole/bin directory.
 2. Run the command ConfigMgmtConsole (./ConfigMgmtConsole for unix based systems).
-The console connects to the Direct Project configuration service and manages records using the configuration service client module. By default it uses the url http://localhost:8081/config-service/ConfigurationService, but can be overridden using the configURL command line parameter.
+The console connects to the Direct Project configuration service and manages records using the configuration service client module. By default it uses the url `http://localhost:8081/config-service/ConfigurationService`, but can be overridden using the configURL command line parameter.
 
 ```
 ConfigMgmtConsole configURL http://confserver/config-service/ConfigurationService

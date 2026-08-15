@@ -1,3 +1,7 @@
+---
+title: Simple Text Lexicon Version I
+---
+
 # Simple Text Lexicon Version I
 
 The [SimpleTextV1Lexicon](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/impl/SimpleTextV1LexiconPolicyParser.html) goal is to allow policy definitions to be written in a simple syntax similar to writing an "if" statement. The lexicon defines a small set of reserved tokens consisting of binary and unary operators as well as literals that represent attributes/extensions within an X509 certificate. Definitions can range from trivial statement to very complex compound, grouped, and ternary expressions.
