@@ -53,17 +53,39 @@ STA configuration consists of two key concepts: policies and policy groups. Poli
      - Policy: Message Direct and Use 
 ```
 
-Configuration is done through config-manager command line console, but will be available in the config-ui tool in subsequent releases. The config-manager console is distributed with the stock reference implementation assembly. To run the console:
+Configuration is done through a command-line configuration management tool. Which tool you use depends on your deployment model — the interactive commands themselves (`IMPORTPOLICY`, `ADDPOLICYGROUP`, `ADDPOLICYTOGROUP`, `ADDPOLICYGROUPTODOMAIN`, etc.) are identical between the two and are matched case-insensitively; only the tool you launch differs:
 
-1. Launch a command shell and navigate to the ConfigTools/ConfigMgmtConsole/bin directory.
-2. Run the command ConfigMgmtConsole (./ConfigMgmtConsole for unix based systems).
-The console connects to the Direct Project configuration service and manages records using the configuration service client module. By default it uses the url `http://localhost:8081/config-service/ConfigurationService`, but can be overridden using the configURL command line parameter.
+* **Cloud Native deployment model:** Use the **Configuration Manager** tool. See [Configuration Manager Tool](https://directprojectjavari.github.io/direct-project-stock/cloud-native-deployment#configuration-manager-tool) in the stock deployment guide for where to download it and how to run it. Place the jar in its own directory and run it directly with `java -jar`:
 
-```
-ConfigMgmtConsole configURL http://confserver/config-service/ConfigurationService
-```
+  ```
+  java -jar config-manager-9.0.0.jar
+  ```
 
-The console can either take command directly on the command line or run interactively. If no arguments or commands are passed on the command line (with the exception of the configURL), then console runs interactively. For a list of supported commands, simple type help all either as command line arguments or when running interactively.
+  With no arguments the interactive console is launched. A single command can also be run non-interactively by passing it directly on the command line:
+
+  ```
+  java -jar config-manager-9.0.0.jar IMPORTPOLICY "My Policy" ./MyPolicy.pol
+  ```
+
+  Configuration Manager connects to the Configuration Service's REST API. By default it uses `http://localhost:8082/`; override it with the `direct.config.service.url` property, either in an `application.yml` placed alongside the jar or as a command-line argument:
+
+  ```
+  java -jar config-manager-9.0.0.jar --direct.config.service.url=http://confserver:8082/
+  ```
+
+* **Legacy deployment model:** Use the **ConfigMgmtConsole** tool distributed with the legacy reference implementation assembly. Launch a command shell, navigate to the `<DIRECTHOME>`/ConfigMgmtConsole directory (or `ConfigTools/ConfigMgmtConsole/bin` in older assemblies), and run:
+
+  ```
+  ConfigMgmtConsole
+  ```
+
+  Use `./ConfigMgmtConsole` on Unix-based systems. The console connects to the Direct Project configuration service using the configuration service client module. By default it uses the url `http://localhost:8081/config-service/ConfigurationService`, but this can be overridden using the `configURL` command-line parameter:
+
+  ```
+  ConfigMgmtConsole configURL http://confserver/config-service/ConfigurationService
+  ```
+
+Either tool can take commands directly on the command line or run interactively. If no arguments or commands are passed on the command line (with the exception of the connection URL), the tool runs interactively. For a list of supported commands, type `help all` either as command-line arguments or when running interactively.
 
 **Import Policy**
 
