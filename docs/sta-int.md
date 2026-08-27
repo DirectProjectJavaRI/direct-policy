@@ -4,22 +4,25 @@ title: Security and Trust (STA) Integration and Configuration
 
 # Security and Trust (STA) Integration and Configuration
 
+The Security and Trust Agent (STA) is the component of a Direct implementation that signs, encrypts, decrypts, and trust-validates messages. This guide explains how the agent applies policy filters and how to configure the policies it enforces.
+
 ## STA Integration
 
-The security and trust agent applies at strategic intercept points policy filters to remove discovered and other encountered certificates that do not meet policy requirements. This allows Direct implementations to enforce specific policy decisions based on regulatory and political needs while remaining backward compatible the underlying transport specification.
+At strategic points in its processing, the Security and Trust Agent applies policy filters that remove discovered or otherwise encountered certificates that do not meet policy requirements. This lets a Direct implementation enforce policy decisions driven by regulatory or organizational needs while remaining backward compatible with the underlying transport specification.
 
-Policy filters are applied (if configured) at the following points or the security and trust agent:
+When configured, policy filters are applied at the following points in the agent:
 
-*Private Certification Resolution
-**Invokes policy decision on the use of certificates for decrypting and message signing.
-**Allows for dual use, or separate signing and encryption certificates to be stored in the same certificate store. This provides backwards compatibility with existing certificate storage implementations.
-*Public Certification Resolution
-**Invokes policy decision on the use of certificates for message encryption. These certificates are generally dynamically discovered over LDAP or DNS.
-88Allows for dual use, or separate signing and encryption certificates to be stored in the public certificate storage location. This provides backwards compatibility with existing discovery implementations.
-*Signature/Trust Validation
-**Invokes policy decisions on the use of certificates extracted from the message signature.
-**Allows for dual use, or separate signing and encryption certificates to be encapsulated within the message signature. This provides backwards compatibility with existing message signing implementations.
-The following diagrams illustrates the modular layout and flow of messages within the security and trust agent with policy filter included at the appropriate points.
+* **Private certificate resolution**
+  * Invokes a policy decision on the use of certificates for decryption and message signing.
+  * Allows dual-use certificates — or separate signing and encryption certificates — to be stored in the same certificate store. This preserves backward compatibility with existing certificate storage implementations.
+* **Public certificate resolution**
+  * Invokes a policy decision on the use of certificates for message encryption. These certificates are generally discovered dynamically over LDAP or DNS.
+  * Allows dual-use certificates — or separate signing and encryption certificates — to be stored in the public certificate storage location. This preserves backward compatibility with existing discovery implementations.
+* **Signature / trust validation**
+  * Invokes a policy decision on the use of certificates extracted from the message signature.
+  * Allows dual-use certificates — or separate signing and encryption certificates — to be encapsulated within the message signature. This preserves backward compatibility with existing message signing implementations.
+
+The following diagrams illustrate the modular layout and message flow within the Security and Trust Agent, with policy filters shown at the points where they apply.
 
 **Outbound Messages**
 
@@ -34,11 +37,11 @@ The following diagrams illustrates the modular layout and flow of messages withi
 ![policyFilterIncoming](assets/policyFilterIncoming.png)
 
 * Resolved private certificates are validated against a private resolver policy (if configured).
-* Certificate extracted from the message signature are validated against a public trust policy (if configured).
+* Certificates extracted from the message signature are validated against a public trust policy (if configured).
 
 ## STA Configuration
 
-STA configuration consists of two key concepts: policies and policy groups. Policies are simple policy definitions and groups are a collection of policies where each policy is assigned a specific intercept point in the STA process depending on message direct and use. Policies group and then assigned to sender domains. Hierarchically , the constructs are organized accordingly:
+STA configuration is built from two concepts: policies and policy groups. A policy is a single policy definition. A policy group is a collection of policies in which each policy is assigned a specific intercept point in the STA process, based on message direction and use. Policy groups are then assigned to domains. The constructs are organized hierarchically:
 
 ```
  + Domain
@@ -48,9 +51,9 @@ STA configuration consists of two key concepts: policies and policy groups. Poli
      |
      |
      |
-     - Policy: Message Direct and Use 
-     - Policy: Message Direct and Use 
-     - Policy: Message Direct and Use 
+     - Policy: message direction and use
+     - Policy: message direction and use
+     - Policy: message direction and use
 ```
 
 Configuration is done through a command-line configuration management tool. Which tool you use depends on your deployment model — the interactive commands themselves (`IMPORTPOLICY`, `ADDPOLICYGROUP`, `ADDPOLICYTOGROUP`, `ADDPOLICYGROUPTODOMAIN`, etc.) are identical between the two and are matched case-insensitively; only the tool you launch differs:
@@ -89,7 +92,7 @@ Either tool can take commands directly on the command line or run interactively.
 
 **Import Policy**
 
-The first step to configuration is importing your policy definition files. Policies are imported with IMPORTPOLICY command.
+The first configuration step is to import your policy definition files. Import a policy with the `IMPORTPOLICY` command.
 
 ```
 IMPORTPOLICY
@@ -100,11 +103,11 @@ Imports a policy from a file with an optional lexicon definition.
 	 [lexicon]: Optional lexicon of the policy definition.  Default to SIMPLE_TEXT_V1 if not supplied.
 ```
 
-When importing policies, the console validates the definition syntax against the provided or default lexicon (i.e. the definition is parsed). If the definition is not valid, then an error message is displayed and the policy is not imported.
+When you import a policy, the tool parses the definition and validates its syntax against the supplied lexicon (or the default lexicon if none is given). If the definition is not valid, the tool displays an error message and does not import the policy.
 
 **Add Group**
 
-Before associating policies to a sender's domain, policies are associated to groups and assigned usages. Groups are initially created with the ADDPOLICYGROUP command.
+Before a policy can be assigned to a domain, it must be added to a policy group and given a usage. Create a group with the `ADDPOLICYGROUP` command.
 
 ```
 ADDPOLICYGROUP
@@ -115,7 +118,7 @@ Adds policy group to the system
 
 **Add Policy To Group**
 
-Policy groups are collections of policies, and each policy within the group is assigned a usage which maps to intercept point in the security and trust process. Policies are associate to groups with the ADDPOLICYTOGROUP command.
+A policy group is a collection of policies, and each policy in the group is assigned a usage that maps to an intercept point in the security and trust process. Add a policy to a group with the `ADDPOLICYTOGROUP` command.
 
 ```
 ADDPOLICYTOGROUP
@@ -128,21 +131,21 @@ Adds an existing policy to a group with a provided usage.
 	 outgoing: Indicates if policy is used for outgoing messages.  Must be one of the following values: true, false
 ```
 
-The policyUse in conjunction with the incoming and outgoing parameters maps to the policy to the following points in the security and trust process.
+The `policyUse` value, together with the `incoming` and `outgoing` parameters, maps the policy to the following points in the security and trust process:
 
 
 | Policy Use | Direction | Intercept Point |
 | --- | --- | --- |
-| PUBLIC RESOLVER | Outgoing | Applied when the recipient(s) certificates are discovered via the public certificate resolver. |
-| PUBLIC RESOLVER | Incoming	| Applied when the sender's certificates are discovered via the public certificate resolver.  This policy is generally not necessary as certificates are extracted from the message signature and filtered via the TRUST policy use. However, it may be desired to use in conjunction with the TRUST filter to logically separate policies. |
-| PRIVATE RESOLVE |	Outgoing | Applied when the sender's certificates are discovered via the private certificate resolver. |
-| PRIVATE RESOLVER |	Incoming | Applied when the recipient(s) certificates are discovered via the private certificate resolver. |
-| TRUST | Outgoing | Applied after the recipient(s) certificate are validated via certificate path chaining.  This policy is generally not necessary if the outgoing PUBLIC RESOLVER filter is set, however, it may be desired to use in conjunction with the PUBLIC RESOLVER filter to logically separate policies. For example, the PUBLIC RESOLVER may filter based on key usage and TRUST resolver may filter based on policy OIDs. Logically separating policies allows for better reuse of policies for other policy groups. |
-| TRUST	|Incoming | Applied after the sender's certificates are validated via certificate path chaining. |
+| PUBLIC RESOLVER | Outgoing | Applied when the recipients' certificates are discovered via the public certificate resolver. |
+| PUBLIC RESOLVER | Incoming | Applied when the sender's certificates are discovered via the public certificate resolver. This policy is generally unnecessary, because the sender's certificates are extracted from the message signature and filtered by the TRUST policy use. You may still want it alongside the TRUST filter to keep policies logically separate. |
+| PRIVATE RESOLVER | Outgoing | Applied when the sender's certificates are discovered via the private certificate resolver. |
+| PRIVATE RESOLVER | Incoming | Applied when the recipients' certificates are discovered via the private certificate resolver. |
+| TRUST | Outgoing | Applied after the recipients' certificates are validated via certificate path chaining. This policy is generally unnecessary if the outgoing PUBLIC RESOLVER filter is set, but you may want it alongside the PUBLIC RESOLVER filter to keep policies logically separate. For example, the PUBLIC RESOLVER filter might check key usage while the TRUST filter checks policy OIDs. Keeping policies separate this way makes them easier to reuse across policy groups. |
+| TRUST | Incoming | Applied after the sender's certificates are validated via certificate path chaining. |
 
 **Add Group To Domain**
 
-The default reference implementation policy resolver applies policies by the sender's domain for outgoing messages and the recipient(s) domain for incoming messages. Policy groups are associated domains with the **ADDPOLICYGROUPTODOMAIN** command.
+The default reference implementation policy resolver applies policies by the sender's domain for outgoing messages and by the recipient's domain for incoming messages. Associate a policy group with a domain using the **ADDPOLICYGROUPTODOMAIN** command.
 
 ```
 ADDPOLICYGROUPTODOMAIN
@@ -154,4 +157,4 @@ Adds an existing policy group to an existing domain.
 
 **Additional Management Commands**
 
-The console supports additional management commands for deleting groups and policies from the system and dis-associating domains, groups, and policies from each other. Use the **help all** command to see a list of all additional commands.
+The tool supports additional management commands for deleting policies and groups and for dissociating domains, groups, and policies from one another. Run `help all` to see the complete list of commands.

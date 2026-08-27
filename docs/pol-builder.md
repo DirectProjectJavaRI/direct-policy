@@ -4,60 +4,60 @@ title: Policy Builder
 
 # Policy Builder
 
-The reference implementation source tree provides a tool for building and testing policies. The tool is located under the /java/direct-policy/tools directory in the source tree and is named policyBuilder.sh for unix/linux based systems and policyBuilder.bat for Windows.
+Policy Builder is a small desktop application for writing and testing policy definitions before you deploy them. It provides a text editor for composing a policy in the Simple Text lexicon and lets you validate that policy against any X.509 certificate to confirm the certificate is treated as you expect.
 
-The policy builder tool is a simple text editor based tool for creating and testing policies. Policies are written in the Simple Text Lexicon syntax and can be tested against any X509 certificate to validate its use.
+The tool ships with the reference implementation source tree. It is located in the `/java/direct-policy/tools` directory and is named `policyBuilder.sh` on Unix, Linux, and macOS, and `policyBuilder.bat` on Windows.
 
-To run the tool, run the following command in the /java/direct-policy/tools directory:
+To run the tool, change to the `/java/direct-policy/tools` directory and run the launcher for your platform:
 
-Windows:
+*Windows*
 
 ```
 policyBuilder.bat
 ```
 
-Unix/Linux/MAC
+*Unix / Linux / macOS*
 
 ```
 ./policyBuilder.sh
 ```
 
-## Policy Editing
+## Editing a Policy
 
-Policies are written in the text section in the upper portion of the tool and may either be loaded from an existing file using the File->Open menu option or you may start creating a new policy from scratch. Policies are saved to a file using the File->Save and File->SaveAs menu options.
+Write your policy in the text area in the upper portion of the window. You can either start a new policy from scratch or open an existing policy file with **File → Open**. Save your work with **File → Save** or **File → Save As**.
 
 ![plcBuilderEmpty](assets/plcBuilderEmpty.png)
 
-The tool validates the syntax of you policy in near real time. It indicates if the policy is valid by displaying the text in black and displaying the text in red if the syntax is not valid.
+The tool validates your policy syntax in near real time. Valid syntax is shown in black text; invalid syntax is shown in red.
 
-**Valid Syntax Example**
+**Valid syntax**
 
-![plcBulderValidSytax](assets/plcBuilderValidSyntax.png)
+![plcBuilderValidSyntax](assets/plcBuilderValidSyntax.png)
 
-**Invalid Syntax Example**
+**Invalid syntax**
 
 ![plcBuilderInvalidSyntax](assets/plcBuilderInvalidSyntax.png)
 
-## Policy Testing
+## Testing a Policy
 
-After you have completed editing your policy, you can test it directly against any X509 certificate. To validate and test your policy, simply click the ellipse (...) button to navigate to the certificate file that you wish to test against and click open. Once the certificate is loaded, click the Validate button to test your policy.
+Once your policy is written, you can test it directly against an X.509 certificate. Click the ellipsis (`...`) button, browse to the certificate file you want to test against, and click **Open**. With the certificate loaded, click **Validate** to run the policy against it.
 
-There are three possible validation outcomes:
+There are three possible outcomes.
 
-* Certificate is in compliance.
+**The certificate is in compliance**
 
-If the policy is valid and the certificate meets all of the criteria of the policy, then the tool will display that the certificate is in compliance with the policy.
+The policy is syntactically valid and the certificate satisfies every condition in the policy.
 
 ![plcBuilderInCompliance](assets/plcBuilderInCompliance.png)
 
-* Certificate is not in compliance.
+**The certificate is not in compliance**
 
-If the policy is valid and the certificate does not meet all of the criteria of the policy, then the tool will display that the certificate is not in compliance with the policy.
+The policy is syntactically valid, but the certificate does not satisfy every condition in the policy.
 
 ![plcBuilderNotInCompliance](assets/plcBuilderNotInCompliance.png)
 
-* Runtime error
+**Runtime error**
 
-If the policy is syntactically correct but contains logical errors, then the tool will report the error along with a stack trace from the engine. The example below is syntactically correct, but creates a runtime exception because it attempts to perform a logical AND against a boolean operand.
+The policy is syntactically correct but contains a logical error that surfaces only when the engine runs it. The tool reports the error along with a stack trace from the engine. The example below is syntactically correct but throws a runtime exception because it applies a logical AND to a non-boolean (integer) operand.
 
 ![plcBuilderRuntimeError](assets/plcBuilderRuntimeError.png)

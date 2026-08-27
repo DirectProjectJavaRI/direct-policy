@@ -4,43 +4,49 @@ title: Policy Engine Architecture
 
 # Policy Engine Architecture
 
-The policy engine is more or less a boolean logic engine. It processes a set of rules called a [PolicyExpression](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyExpression.html) against a provided X509 certificate and determines if the certificate is in compliance with the policy. The engine itself is structurally similar to a compiled programming language and runtime environment. Polices start as definition files written in a specific [PolicyLexicon](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyLexicon.html), are [parsed](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyLexiconParser.html) to an intermediate state, [compiled](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/Compiler.html) into an [ExecutionEngine](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/ExecutionEngine.html) specific set of [Opcodes](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/Opcode.html), and finally processed by the ExecutionEngine.
+At its core, the policy engine is a boolean logic engine. It evaluates a set of rules — a [PolicyExpression](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyExpression.html) — against a given X.509 certificate and decides whether the certificate complies with the policy.
+
+Structurally, the engine resembles a compiled programming language and its runtime. A policy begins life as a definition file written in a particular [PolicyLexicon](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyLexicon.html) (syntax). That definition is [parsed](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyLexiconParser.html) into an intermediate representation, [compiled](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/Compiler.html) into a set of [opcodes](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/Opcode.html) targeted at a specific [ExecutionEngine](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/ExecutionEngine.html), and finally executed by that engine to produce a result.
 
 The following diagram is a modular view of the engine:
 
-![policyEnting](assets/policyEngine.png)
+![policyEngine](assets/policyEngine.png)
 
 ## Policy Definition
 
-Policies are expressed in a boolean type syntax where attributes and extension values of an X509 certificate are evaluated against provided [literals](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/LiteralPolicyExpression.html). The engine provides several operators and supports compound and ternary expression creating a powerful and flexible boolean assertion module. In addition, certain certificate extensions can be flagged as required meaning that the absence of the extension will automatically cause the certificate to be in non compliant with the policy. All definitions ultimately evaluate to a single boolean value indicating if a certificate is in compliance with the policy. A true value indicates compliance while a false value indicates non-compliance.
+Policies are expressed in a boolean syntax in which attributes and extension values of an X.509 certificate are compared against supplied [literals](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/LiteralPolicyExpression.html). The engine provides a range of operators and supports compound and ternary expressions, making it a powerful and flexible way to assert conditions about a certificate.
 
-All policies are written using a formal definition lexicon/syntax, and supported lexicons are enumerated in the PolicyLexicon class:
+A certificate extension can also be flagged as *required*. If a required extension is absent from the certificate, the certificate is automatically treated as non-compliant.
 
-* [Serialized XML](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/impl/XMLLexiconPolicyParser.html): An XML serialized representation of the intermediate state.
-* [Serialized Java Object](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/impl/JavaSerializedObjectLexiconPolicyParser.html): An Java object serialized representation of the intermediate state.
-* [Simple Text Version 1](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/impl/SimpleTextV1LexiconPolicyParser.html): A simple syntax similar to writing an "if" statement.
+Every policy definition ultimately evaluates to a single boolean value: `true` means the certificate complies with the policy, and `false` means it does not.
+
+All policies are written in a formal lexicon (syntax). The supported lexicons are enumerated in the `PolicyLexicon` class:
+
+* [Serialized XML](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/impl/XMLLexiconPolicyParser.html) — An XML representation of the intermediate state.
+* [Serialized Java Object](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/impl/JavaSerializedObjectLexiconPolicyParser.html) — A serialized Java object representation of the intermediate state.
+* [Simple Text Version 1](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/impl/SimpleTextV1LexiconPolicyParser.html) — A simple syntax similar to writing an `if` statement. This is the lexicon most policy authors use; it is documented in full in the [Simple Text Lexicon](stext-lexicon) guide.
 
 ## Policy Lexicon Parser and Compiler
 
-The engine translates policy definitions into executable operations or "opcodes" using a two pass process.
+The engine turns a policy definition into executable operations (opcodes) in a two-pass process: parsing, then compiling.
 
 ### Parsing
 
-A policy definition written in a supported lexicon/syntax is translated into common intermediate state by a [PolicyLexiconParser](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyLexiconParser.html). The parser validates the syntax for correctness and throws a [PolicyParseException](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyParseException.html) is any errors were found. Parsing errors are currently limited in information (ex. they do not yet indicated line or character number where the error occurred), but they do attempt to provide enough information to isolate the cause of the syntax error.
+A [PolicyLexiconParser](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyLexiconParser.html) translates a policy definition written in a supported lexicon into a common intermediate representation. The parser validates the syntax and throws a [PolicyParseException](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyParseException.html) if it finds any errors. Parse errors currently carry limited detail — for example, they do not yet report the line or character position of the error — but they aim to give you enough information to locate the cause.
 
-After parsing is complete (and assuming successful), the parsed definition is stored as a [PolicyExpression](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyExpression.html) object which is the intermediate state. Parsed PolicyExpressions are generally comprised of a tree structure where the leaf nodes are either literals or other policy operator [expressions](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/OperationPolicyExpression.html). The top of a valid tree always consists of operator that evaluates to a boolean value.
+When parsing succeeds, the parsed definition is stored as a [PolicyExpression](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyExpression.html) object, which is the intermediate representation. A parsed `PolicyExpression` is generally a tree, where each leaf node is either a literal or another operator [expression](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/OperationPolicyExpression.html). The root of a valid tree is always an operator that evaluates to a boolean value.
 
-Intermediate state/PolicyExpression objects can be serialized to an external medium using the [PolicyExpressionSerializer](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyExpressionSerializer.html) which is supported by almost all PolicyLexiconParser implementations.
+Intermediate `PolicyExpression` objects can be serialized to an external medium with the [PolicyExpressionSerializer](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyExpressionSerializer.html), which almost all `PolicyLexiconParser` implementations support.
 
-Parsers should be created using the [PolicyLexiconParserFactory](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyLexiconParserFactory.html). The following is a code snippet example that creates a parser and parses a definition into an intermediate state object:
+Create parsers with the [PolicyLexiconParserFactory](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyLexiconParserFactory.html). The following example creates a parser and parses a definition into an intermediate-state object:
 
-```  
-final InputStream stream = IOUtils.toInputStream("X509.TBS.EXTENSION.SubjectKeyIdentifier+ = 1.3.2.3");
+```
+  final InputStream stream = IOUtils.toInputStream("X509.TBS.EXTENSION.SubjectKeyIdentifier+ = 1.3.2.3");
 
   final LexiconParser parser = PolicyLexiconParserFactory.getInstance(PolicyLexicon.SIMPLE_TEXT_V1);
-  
+
   PolicyExpression expression = null;
-  
+
   try
   {
      expression = parser.parse(stream);
@@ -53,31 +59,33 @@ final InputStream stream = IOUtils.toInputStream("X509.TBS.EXTENSION.SubjectKeyI
 
 ### Compiling
 
-The [compiler](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/Compiler.html) is the second step of the execution process after a definition has been parse into a [PolicyExpression](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyExpression.html) tree. The compiler consumes the parsed expression and a certificate and generates an ordered vector of [Opcode](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/Opcode.html) objects that are specific to a particular [ExecutionEngine](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/ExecutionEngine.html). If an error is encountered in the compilation process, a [PolicyProcessException](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyProcessException.html) exception is thrown.
+The [compiler](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/Compiler.html) is the second pass, run after a definition has been parsed into a [PolicyExpression](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyExpression.html) tree. It takes the parsed expression and a certificate and produces an ordered vector of [Opcode](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/Opcode.html) objects specific to a particular [ExecutionEngine](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/ExecutionEngine.html). If an error occurs during compilation, the compiler throws a [PolicyProcessException](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyProcessException.html).
 
-The compiler extracts attribute values from the provided certificate for policy expression tokens that evaluate to [ReferencePolicyExpressions](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/ReferencePolicyExpression.html) (lexicons specify what syntactical tokens represent certificate attributes). By default, the compile operation throws a [PolicyRequiredException](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyRequiredException.html) exception if a required attribute is missing in the provided certificate. This halts the evaluation process immediately at the point the first missing required field is encountered. However, there are use cases, such as a policy validation tool, where generating a complete list of missing fields may be useful. In addition, it may desirable to process the certificate through the execution engine even though it is known that required fields are missing. Obviously this is not the most efficient operating mode when executing inside of an environment where the only result of interest is the simple binary decision of policy compliance.
+For policy-expression tokens that resolve to [ReferencePolicyExpressions](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/ReferencePolicyExpression.html), the compiler extracts the corresponding attribute values from the certificate. (Each lexicon defines which tokens represent certificate attributes.)
 
-To enable the ability to retrieve a list of all known missing fields (or other compilation errors), the compiler supports a report mode that can be enabled by calling the [setReportModeEnabled](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/Compiler.html#setReportModeEnabledboolean) method. When reporting mode is turned on, the compiler will no longer throw an exception when a required attribute is missing. After compilation is complete, a collection of all compilation issues can be retrieved by calling the [getCompilationReport](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/Compiler.html#getCompilationReport) method.
+By default, if a required attribute is missing from the certificate, the compiler throws a [PolicyRequiredException](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyRequiredException.html) and halts evaluation at the first missing field. In some cases, though — a policy validation tool, for instance — it is useful to collect a complete list of missing fields, or to run the certificate through the execution engine even when required fields are known to be missing. (This is not the most efficient mode when the only result of interest is the binary compliance decision.)
 
-Compilers are created by directly instantiating a concrete implementation. The following is a code snippet example expands on the previous example to compile a parsed policy definition and associate it with a certificate. It uses a [StackMachineCompiler](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/impl/machine/StackMachineCompiler.html) that is executed by the [StackMachine](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/impl/machine/StackMachine.html) execution engine.
+To collect all missing fields and other compilation errors instead of failing fast, enable *report mode* by calling [setReportModeEnabled](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/Compiler.html#setReportModeEnabledboolean). In report mode, the compiler no longer throws an exception for a missing required attribute. After compilation, retrieve the full collection of compilation issues with [getCompilationReport](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/Compiler.html#getCompilationReport).
+
+Create a compiler by instantiating a concrete implementation directly. The following example extends the previous one: it compiles the parsed definition against a certificate using a [StackMachineCompiler](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/impl/machine/StackMachineCompiler.html), whose opcodes are executed by the [StackMachine](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/impl/machine/StackMachine.html) execution engine.
 
 ```
   final X509Certificate certToEvaluate = getCertificateToEvaluate();
-  
+
   final InputStream stream = IOUtils.toInputStream("X509.TBS.EXTENSION.SubjectKeyIdentifier+ = 1.3.2.3");
 
   final LexiconParser parser = PolicyLexiconParserFactory.getInstance(PolicyLexicon.SIMPLE_TEXT_V1);
-  
+
   final Compiler compiler = new StackMachineCompiler();
-  
-  final Vector<Opcode> opcodes = null;
-  
+
+  Vector<Opcode> opcodes = null;
+
   PolicyExpression expression = null;
-  
+
   try
   {
      expression = parser.parse(stream);
-     
+
      opcodes = compiler.compile(certToEvaluate, expression);
   }
   catch (PolicyProcessException e)
@@ -88,33 +96,33 @@ Compilers are created by directly instantiating a concrete implementation. The f
 
 ### Execution Engine
 
-The [ExecutionEngine](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/ExecutionEngine.html) is the final stage of the policy evaluation process. It executes an ordered vector of opcodes and produces a boolean result indicating if the previously provided certificate is compliant with the provided policy definition. You may think of the execution engine as the runtime library of the policy engine.
+The [ExecutionEngine](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/ExecutionEngine.html) is the final stage of policy evaluation. It runs an ordered vector of opcodes and produces a boolean result indicating whether the certificate supplied earlier complies with the policy definition. You can think of the execution engine as the runtime library of the policy engine.
 
-Remember that opcodes produced by a compiler are targeted to be executed by a specific execution engine implementation. The reference implementation provides a default engine based on a stack machine. The [StackMachine](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/impl/machine/StackMachine.html) class implements the engine, and as illustrated in the previous section, opcodes for the machine are generated by the [StackMachineCompiler](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/impl/machine/StackMachineCompiler.html) class.
+Remember that the opcodes a compiler produces are targeted at a specific execution engine implementation. The reference implementation provides a default engine based on a stack machine: the [StackMachine](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/impl/machine/StackMachine.html) class implements the engine, and — as shown in the previous section — its opcodes are generated by the [StackMachineCompiler](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/impl/machine/StackMachineCompiler.html).
 
-The execution engine implements one simple method: [evaluate](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/ExecutionEngine.html#evaluatejava.util.Vector). This method takes the the ordered vector of opcodes from the compiler and returns a simple boolean result. If the return value is true, then the certificate provided to the compiler is considered in compliance with the policy definition. A return value of false indicates the opposite. Like the parser and compiler, the execution engine throws a [PolicyProcessException](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyProcessException.html) if an error occurs during the execution process.
+The execution engine exposes a single method, [evaluate](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/ExecutionEngine.html#evaluatejava.util.Vector). It takes the ordered vector of opcodes from the compiler and returns a boolean: `true` means the certificate supplied to the compiler complies with the policy definition, and `false` means it does not. Like the parser and compiler, the execution engine throws a [PolicyProcessException](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyProcessException.html) if an error occurs during execution.
 
 ```
   final X509Certificate certToEvaluate = getCertificateToEvaluate();
-  
+
   final InputStream stream = IOUtils.toInputStream("X509.TBS.EXTENSION.SubjectKeyIdentifier+ = 1.3.2.3");
 
   final LexiconParser parser = PolicyLexiconParserFactory.getInstance(PolicyLexicon.SIMPLE_TEXT_V1);
-  
+
   final Compiler compiler = new StackMachineCompiler();
-  
+
   final ExecutionEngine engine = new StackMachine();
-  
-  final Vector<Opcode> opcodes = null;
-  
+
+  Vector<Opcode> opcodes = null;
+
   PolicyExpression expression = null;
-  
+
   try
   {
      expression = parser.parse(stream);
-     
+
      opcodes = compiler.compile(certToEvaluate, expression);
-     
+
      return engine.evaluate(opcodes);
   }
   catch (PolicyProcessException e)
@@ -125,36 +133,35 @@ The execution engine implements one simple method: [evaluate](http://api.directp
 
 ### Policy Filter
 
-In the previous section the policy engine was broken down into its individual parts and code provided to illustrate how the pieces work together to ultimately discern if a certificate is compliant with a given policy. Utilizing the components modularly is extremely useful for uses such as writing a policy editor or an external evaluation tool. However, the three phase process is almost always the same when starting with a definition and a certificate and evaluating for compliance. It would be desirable to aggregate the process is a simple construct. Thus the introduction of the [PolicyFilter](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyFilter.html).
+The sections above break the policy engine into its individual parts and show how they fit together to decide whether a certificate complies with a policy. Using the components separately is valuable for tasks such as writing a policy editor or an external evaluation tool. But when you simply want to start with a definition and a certificate and get a compliance decision, the three-phase flow is almost always the same. The [PolicyFilter](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyFilter.html) packages that flow into a single construct.
 
-Policy filters are the core constructs of the policy engine as they determine if an X509 certificate is compliant with a given policy. Internally they encapsulate the modular pieces of the engine (parser, compiler, and execution engine), and orchestrate the flow of a certificate and policy through the engine's components. Each functional component of the policy engine can be used independently to perform specific tasks such as those stated in the previous paragraph, however filters combine the components together to achieve the primary value proposition of the engine: evaluating X509 certificate compliance to a policy.
+Policy filters are the central construct of the policy engine: they determine whether an X.509 certificate complies with a given policy. Internally, a filter encapsulates the modular pieces of the engine — parser, compiler, and execution engine — and orchestrates the flow of a certificate and a policy through them. Each component can still be used on its own for the specialized tasks described above, but the filter combines them to deliver the engine's primary value: evaluating an X.509 certificate's compliance with a policy.
 
-The term filter is derived from the primary use case of the PolicyFilter: to filter non compliant certificates within the security and trust [agent](http://api.directproject.info/agent/2.0.13/apidocs/org/nhindirect/stagent/NHINDAgent.html) process. In the agent, filters are applied at strategic intercept points to remove discovered and other encountered certificates that do not meet policy requirements. These intercept points are covered in detail in the [STA](http://api.directproject.info/direct-policy/1.0/users-guide/dev-sta.html) section of this book.
+The name *filter* comes from the primary use case: filtering out non-compliant certificates within the Security and Trust [Agent](http://api.directproject.info/agent/2.0.13/apidocs/org/nhindirect/stagent/NHINDAgent.html). In the agent, filters are applied at strategic intercept points to remove discovered or otherwise encountered certificates that do not meet policy requirements. Those intercept points are covered in detail in the [STA Integration](sta-int) guide.
 
-The filter provides one method with two variations:
+The filter provides one method with two variants:
 
 ```
   boolean isCompliant(X509Certificate cert, InputStream policyStream, PolicyLexicon lexicon) throws PolicyProcessException;
-	
+
   boolean isCompliant(X509Certificate cert, PolicyExpression expression) throws PolicyProcessException;
 ```
 
-The first version accepts the certificate to be evaluated, the policy definition as an InputStream, and the lexicon/syntax that the definition is written in.
+The first variant accepts the certificate to evaluate, the policy definition as an `InputStream`, and the lexicon the definition is written in.
 
-The second version is a slight that exists for performance reasons. In some use cases (specifically in the security and trust agent), the same PolicyExpression will be utilized multiple times, so it is not necessary to parse the policy definition each time a certificate needs to be evaluated. This version allows a definition to be pre-parsed and reused against multiple certificates.
+The second variant exists for performance. In some cases — the Security and Trust Agent, in particular — the same `PolicyExpression` is used many times, so there is no need to re-parse the policy definition for every certificate. This variant lets you parse a definition once and reuse it across many certificates.
 
-Parsers should be created using the [PolicyFilterFactory](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyFilterFactory.html). By default, the factory creates a filter using stack machine compiler and execution engine. However, the compiler and engine can be overridden by simply providing instances of the desired compiler and engine. The following is a code snippet example that creates a default policy filter an:
-Execution engines are created by directly instantiating a concrete implementation. The following is a code snippet example expands on the previous example to compile a parsed policy definition, associate it with a certificate via a compiler, and determine if the certificate is compliant with the policy via the execution engine.
+Create filters with the [PolicyFilterFactory](http://api.directproject.info/direct-policy/1.0/apidocs/org/nhindirect/policy/PolicyFilterFactory.html). By default, the factory builds a filter that uses the stack machine compiler and execution engine; you can override either by passing instances of the compiler and engine you want. The following example creates a default policy filter and uses it to evaluate a certificate against a definition:
 
 ```
   final X509Certificate certToEvaluate = getCertificateToEvaluate();
-  
+
   final InputStream stream = IOUtils.toInputStream("X509.TBS.EXTENSION.SubjectKeyIdentifier+ = 1.3.2.3");
-  
+
   try
-  {  
+  {
      final PolicyFilter filter = PolicyFilterFactory.getInstance();
-     
+
      return filter.isCompliant(certToEvaluate, stream, PolicyLexicon.SIMPLE_TEXT_V1);
   }
   catch (PolicyProcessException e)
