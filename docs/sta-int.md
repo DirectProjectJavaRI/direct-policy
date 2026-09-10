@@ -58,7 +58,7 @@ STA configuration is built from two concepts: policies and policy groups. A poli
 
 Configuration is done through a command-line configuration management tool. Which tool you use depends on your deployment model — the interactive commands themselves (`IMPORTPOLICY`, `ADDPOLICYGROUP`, `ADDPOLICYTOGROUP`, `ADDPOLICYGROUPTODOMAIN`, etc.) are identical between the two and are matched case-insensitively; only the tool you launch differs:
 
-* **Cloud Native deployment model:** Use the **Configuration Manager** tool. See [Configuration Manager Tool](https://directprojectjavari.github.io/direct-project-stock/cloud-native-deployment#configuration-manager-tool) in the stock deployment guide for where to download it and how to run it. Place the jar in its own directory and run it directly with `java -jar`:
+* **Cloud Native deployment model:** Use the **Configuration Manager** tool. See [Configuration Manager Tool](https://directprojectjavari.github.io/docs/direct-project-stock/configuration-manager) in the stock deployment guide for where to download it and how to run it. Place the jar in its own directory and run it directly with `java -jar`:
 
   ```
   java -jar config-manager-9.0.0.jar
